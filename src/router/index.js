@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 const routes = [
   {
@@ -26,27 +28,27 @@ const routes = [
       {
         path: 'account',
         name: 'sys_account', // <-- Nama harus sama persis dengan routeName di menu.js
-        component: () => import('@/views/Ecommerce.vue'), // Sementara pakai Ecommerce untuk testing
+        component: () => import('@/views/Pages/Administrator/User/Account/Index.vue'), // Sementara pakai Ecommerce untuk testing
       },
       {
         path: 'roles',
         name: 'sys_roles',
-        component: () => import('@/views/Ecommerce.vue'),
+        component: () => import('@/views/Pages/Administrator/User/Roles/Index.vue'),
       },
       {
         path: 'permission',
         name: 'sys_permission',
-        component: () => import('@/views/Ecommerce.vue'),
+        component: () => import('@/views/Pages/Administrator/User/Permission/Index.vue'),
       },
       {
         path: 'document',
         name: 'sys_docs',
-        component: () => import('@/views/Ecommerce.vue'),
+        component: () => import('@/views/Pages/Administrator/Config/DocsNumb/Index.vue'),
       },
       {
         path: 'logs',
         name: 'sys_logs',
-        component: () => import('@/views/Ecommerce.vue'),
+        component: () => import('@/views/Pages/Administrator/Config/SystemLogs/Index.vue'),
       },
     ],
   },
@@ -62,6 +64,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  NProgress.start()
   const authStore = useAuthStore()
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
@@ -71,6 +74,10 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
+})
+
+router.afterEach(() => {
+  NProgress.done()
 })
 
 export default router

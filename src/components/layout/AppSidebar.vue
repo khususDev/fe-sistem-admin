@@ -195,20 +195,35 @@ const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar()
 
 // Translator: Mengubah struktur menuData menjadi format yang dipahami oleh Template
 const mappedMenuGroups = computed(() => {
-  const userRole = authStore.userRole
+  // 1. Ambil array roles dari user yang sedang login (defaultnya array kosong jika belum ada)
+  const userRoles = authStore.user?.roles || []
+
+  // 2. FUNGSI SAKTI: Cek hak akses kebal huruf besar/kecil & kebal spasi
+  // (Misal: 'SUPER ADMIN' dari database akan otomatis cocok dengan 'superadmin' di menu.js)
+  const hasAccess = (allowedRoles) => {
+    if (!allowedRoles || allowedRoles.length === 0) return true // Jika menu tidak punya aturan role, tampilkan
+
+    return allowedRoles.some((allowed) =>
+      userRoles.some(
+        (userRole) =>
+          userRole.toLowerCase().replace(/\s/g, '') === allowed.toLowerCase().replace(/\s/g, ''),
+      ),
+    )
+  }
 
   return menuData
     .map((group) => {
       const items = group.menus
-        .filter((menu) => menu.roles.includes(userRole))
+        // Gunakan fungsi hasAccess di sini
+        .filter((menu) => hasAccess(menu.roles))
         .map((menu) => {
           return {
             name: menu.label,
-            icon: GridIcon, // Default icon, Anda bisa menambahkan atribut 'icon' di menu.js nanti
+            icon: GridIcon,
             path: menu.routeName ? { name: menu.routeName } : null,
 
             subItems: menu.submenus
-              ?.filter((sub) => sub.roles.includes(userRole))
+              ?.filter((sub) => hasAccess(sub.roles))
               .map((sub) => {
                 return {
                   name: sub.label,
@@ -216,7 +231,7 @@ const mappedMenuGroups = computed(() => {
 
                   // Map tingkat 3
                   subItems: sub.submenus
-                    ?.filter((sub2) => sub2.roles.includes(userRole))
+                    ?.filter((sub2) => hasAccess(sub2.roles))
                     .map((sub2) => {
                       return {
                         name: sub2.label,

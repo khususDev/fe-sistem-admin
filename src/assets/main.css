@@ -5,6 +5,38 @@ layer(base);
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: 'Satoshi';
+  src: url('./fonts/Satoshi-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('./fonts/Satoshi-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('./fonts/Satoshi-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('./fonts/Satoshi-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --font-*: initial;
   --font-outfit: Outfit, sans-serif;
@@ -40,6 +72,22 @@ layer(base);
   --color-transparent: transparent;
   --color-white: #ffffff;
   --color-black: #101828;
+  --color-primary: #3C50E0;
+    --color-secondary: #80CAEE;
+  
+    --color-success: #219653;
+    --color-danger: #D34053;
+    --color-warning: #FFA70B;
+  
+    --color-stroke: #E2E8F0;
+    --color-gray: #EFF4F5;
+    --color-gray-2: #F7F9FC;
+  
+    --color-boxdark: #24303F;
+    --color-boxdark-2: #1A222C;
+    --color-strokedark: #2E3A47;
+  
+    --color-meta-4: #313D4A;
 
   --color-brand-25: #f2f7ff;
   --color-brand-50: #ecf3ff;
@@ -160,6 +208,64 @@ layer(base);
   --z-index-9999: 9999;
   --z-index-99999: 99999;
   --z-index-999999: 999999;
+}
+
+.Toastify__toast-container {
+  z-index: 9999999 !important;
+  margin-top: 60px !important;
+  /* Sesuaikan angka ini dengan tinggi header Anda */
+}
+
+/* --- CUSTOM VUE3-TOASTIFY (STYLE MATERIAL ELEGAN) --- */
+:root {
+  /* Dimensi */
+  --toastify-toast-width: 360px;
+  --toastify-toast-min-height: 64px;
+
+  /* Sudut Melengkung & Efek Melayang (Shadow) */
+  --toastify-toast-bd-radius: 8px;
+  --toastify-toast-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  /* Mengubah Warna Bawaan Menjadi Warna Material (Seperti Gambar 2) */
+  --toastify-color-success: #4caf50;
+  --toastify-color-error: #ef5350;
+  --toastify-color-warning: #ffb300;
+  --toastify-color-info: #1e88e5;
+}
+
+/* Mengatur jarak dalam (padding) agar konten tidak mepet */
+.Toastify__toast {
+  padding: 12px 16px !important;
+}
+
+/* Tipografi: Menyesuaikan ukuran dan ketebalan font */
+.Toastify__toast-body {
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  padding: 0 12px !important;
+  line-height: 1.4 !important;
+}
+
+/* Proporsi Ikon Kiri */
+.Toastify__toast-icon {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+/* Proporsi Tombol Close (X) di Kanan */
+.Toastify__close-button {
+  align-self: center !important;
+  opacity: 0.6 !important;
+  transition: 0.2s ease !important;
+}
+
+.Toastify__close-button:hover {
+  opacity: 1 !important;
+}
+
+.Toastify__close-button>svg {
+  width: 16px !important;
+  height: 16px !important;
 }
 
 /*
@@ -757,4 +863,8 @@ span.flatpickr-weekday,
 
 .edit-button {
   @apply flex w-full items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200 lg:inline-flex lg:w-auto;
+}
+
+html {
+  font-size: 80%;
 }
