@@ -41,6 +41,11 @@ const routes = [
         component: () => import('@/views/Pages/Administrator/User/Permission/Index.vue'),
       },
       {
+        path: 'appconfig',
+        name: 'sys_setting',
+        component: () => import('@/views/Pages/Administrator/Config/AppSetting/Index.vue'),
+      },
+      {
         path: 'document',
         name: 'sys_docs',
         component: () => import('@/views/Pages/Administrator/Config/DocsNumb/Index.vue'),

@@ -15,23 +15,24 @@
   >
     <div :class="['py-8 flex', !isExpanded && !isHovered ? 'lg:justify-center' : 'justify-start']">
       <router-link to="/">
-        <img
-          v-if="isExpanded || isHovered || isMobileOpen"
-          class="dark:hidden"
-          src="/images/logo/logo.svg"
-          alt="Logo"
-          width="150"
-          height="40"
-        />
-        <img
-          v-if="isExpanded || isHovered || isMobileOpen"
-          class="hidden dark:block"
-          src="/images/logo/logo-dark.svg"
-          alt="Logo"
-          width="150"
-          height="40"
-        />
-        <img v-else src="/images/logo/logo-icon.svg" alt="Logo" width="32" height="32" />
+        <template v-if="isExpanded || isHovered || isMobileOpen">
+          <img
+            :src="settingStore.settings.logo_lg"
+            alt="Logo"
+            class="max-h-11 object-contain dark:brightness-100"
+            :class="{
+              'dark:invert': settingStore.settings.logo_lg === '/images/logo/logo-large.png',
+            }"
+          />
+        </template>
+
+        <template v-else>
+          <img
+            :src="settingStore.settings.logo_sm"
+            alt="Logo Icon"
+            class="h-8 w-8 object-contain"
+          />
+        </template>
       </router-link>
     </div>
 
@@ -174,6 +175,14 @@
       </nav>
       <SidebarWidget v-if="isExpanded || isHovered || isMobileOpen" />
     </div>
+
+    <div
+      v-if="isExpanded || isHovered || isMobileOpen"
+      class="p-4 text-center text-[10px] text-gray-400 border-t border-gray-100 dark:border-gray-800 mt-auto"
+    >
+      &copy; {{ new Date().getFullYear() }} <br />
+      {{ settingStore.settings.company_name }}
+    </div>
   </aside>
 </template>
 
@@ -188,20 +197,19 @@ import { menuData } from '@/data/menu.js'
 
 import { GridIcon, ChevronDownIcon, HorizontalDots } from '../../icons'
 import SidebarWidget from './SidebarWidget.vue'
+import { useSettingStore } from '@/stores/setting'
 
+const settingStore = useSettingStore()
 const route = useRoute()
 const authStore = useAuthStore()
 const { isExpanded, isMobileOpen, isHovered, openSubmenu } = useSidebar()
 
 // Translator: Mengubah struktur menuData menjadi format yang dipahami oleh Template
 const mappedMenuGroups = computed(() => {
-  // 1. Ambil array roles dari user yang sedang login (defaultnya array kosong jika belum ada)
   const userRoles = authStore.user?.roles || []
 
-  // 2. FUNGSI SAKTI: Cek hak akses kebal huruf besar/kecil & kebal spasi
-  // (Misal: 'SUPER ADMIN' dari database akan otomatis cocok dengan 'superadmin' di menu.js)
   const hasAccess = (allowedRoles) => {
-    if (!allowedRoles || allowedRoles.length === 0) return true // Jika menu tidak punya aturan role, tampilkan
+    if (!allowedRoles || allowedRoles.length === 0) return true
 
     return allowedRoles.some((allowed) =>
       userRoles.some(
@@ -214,7 +222,6 @@ const mappedMenuGroups = computed(() => {
   return menuData
     .map((group) => {
       const items = group.menus
-        // Gunakan fungsi hasAccess di sini
         .filter((menu) => hasAccess(menu.roles))
         .map((menu) => {
           return {
@@ -229,7 +236,6 @@ const mappedMenuGroups = computed(() => {
                   name: sub.label,
                   path: sub.routeName ? { name: sub.routeName } : null,
 
-                  // Map tingkat 3
                   subItems: sub.submenus
                     ?.filter((sub2) => hasAccess(sub2.roles))
                     .map((sub2) => {

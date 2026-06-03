@@ -20,37 +20,43 @@ import axios from 'axios'
 const app = createApp(App)
 NProgress.configure({ showSpinner: false, speed: 400, minimum: 0.2 })
 const pinia = createPinia()
-
 app.use(router)
 app.use(pinia)
 app.use(VueApexCharts)
 
 app.use(Vue3Toastify, {
-  autoClose: 3000, 
-  position: 'top-right', 
-  theme: 'colored', 
-  zIndex: 9999999, 
+  autoClose: 3000,
+  position: 'top-right',
+  theme: 'colored',
+  zIndex: 9999999,
+})
+
+import { onMounted } from 'vue'
+import { useSettingStore } from '@/stores/setting.js' // Import store setting
+const settingStore = useSettingStore() // Inisialisasi store setting
+onMounted(() => {
+  settingStore.fetchSettings() // Panggil fetchSettings saat aplikasi dimuat
 })
 
 // --- KONFIGURASI AXIOS ---
 axios.defaults.baseURL = 'http://127.0.0.1:8000/api'
 
-axios.interceptors.request.use(config => {
+axios.interceptors.request.use((config) => {
   NProgress.start()
   const token = localStorage.getItem('token')
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
   }
-  config.headers.Accept = 'application/json' 
+  config.headers.Accept = 'application/json'
   return config
 })
 
 axios.interceptors.response.use(
-  response => {
+  (response) => {
     NProgress.done()
     return response
   },
-  error => {
+  (error) => {
     NProgress.done()
     if (error.response && error.response.status === 401) {
       localStorage.removeItem('token')
@@ -59,7 +65,7 @@ axios.interceptors.response.use(
       router.push({ name: 'Signin' })
     }
     return Promise.reject(error)
-  }
+  },
 ) // <-- Tadi kurang kurung tutup di sini
 
 app.mount('#app')

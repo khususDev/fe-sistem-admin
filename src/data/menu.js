@@ -46,6 +46,12 @@ export const menuData = [
         roles: ['superadmin', 'admin_gudang'],
         submenus: [
           {
+            label: 'System Setting',
+            routeName: 'sys_setting',
+            roles: ['superadmin'],
+            submenus: [],
+          },
+          {
             label: 'Document Numbering',
             routeName: 'sys_docs',
             roles: ['superadmin', 'admin', 'user'],

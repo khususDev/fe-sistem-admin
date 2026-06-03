@@ -221,7 +221,7 @@ onMounted(() => {
           </div>
 
           <div
-            v-else-if="log.description === 'updated' && log.changes?.old && log.changes?.attributes"
+            v-else-if="log.description === 'updated' && log.changes?.attributes"
             class="flex flex-col"
           >
             <span class="font-semibold text-primary mb-1 text-xs">Mengubah data berikut:</span>
@@ -230,10 +230,19 @@ onMounted(() => {
                 <span class="capitalize font-medium text-black dark:text-white"
                   >{{ formatKey(key) }}:</span
                 >
-                <span class="line-through text-danger mx-1">{{
-                  log.changes.old[key] || '(kosong)'
-                }}</span>
-                <span class="text-success font-medium">➔ {{ val || '(dikosongkan)' }}</span>
+
+                <template v-if="log.changes.old">
+                  <span class="line-through text-danger mx-1">{{
+                    log.changes.old[key] || '(kosong)'
+                  }}</span>
+                  <span class="text-success font-medium">➔ {{ val || '(dikosongkan)' }}</span>
+                </template>
+
+                <template v-else>
+                  <span class="text-success font-medium mx-1"
+                    >➔ Diperbarui menjadi: {{ val || '(dikosongkan)' }}</span
+                  >
+                </template>
               </li>
             </ul>
           </div>

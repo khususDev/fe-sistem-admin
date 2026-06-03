@@ -14,6 +14,7 @@ import FormSelect from '@/Components/Form/FormSelect.vue' // Komponen baru
 import Modal from '@/Components/Modal/Modal.vue'
 import ConfirmModal from '@/Components/Modal/ConfirmModal.vue'
 import StatusBadge from '@/Components/Badge/StatusBadge.vue'
+import FileUpload from '@/Components/Form/FileUpload.vue' // Komponen baru untuk upload file
 
 import useCrud from '@/Composables/useCrud'
 import useTable from '@/Composables/useTable'
